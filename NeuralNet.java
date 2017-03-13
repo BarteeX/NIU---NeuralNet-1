@@ -5,10 +5,10 @@
  */
 package neuralnet;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import static javafx.scene.input.KeyCode.T;
 
 /**
  *
@@ -19,84 +19,56 @@ public class NeuralNet {
     private List<List<Neuron>> NeuronLayersList;
     private int nubmerOfInputs;
     
-    private void setNumberOfNeuronsForEachLayer() {
-        NumberOfNeuronsOnLayerList = new LinkedList<>();
-        
-        this.NumberOfNeuronsOnLayerList.add(4);
-        this.NumberOfNeuronsOnLayerList.add(5);
-        this.NumberOfNeuronsOnLayerList.add(2);
+    private void setLists() {
+        this.NumberOfNeuronsOnLayerList = new LinkedList<>();
+        this.NeuronLayersList = new LinkedList<>();
     }
     
-    public void setNumberOfNeuronsForEachLayer(int first, int second, int third) {
-        NumberOfNeuronsOnLayerList = new LinkedList<>();
-        
-        this.NumberOfNeuronsOnLayerList.add(first);
-        this.NumberOfNeuronsOnLayerList.add(second);
-        this.NumberOfNeuronsOnLayerList.add(third);
+    private void setNumberOfNeuronsForEachLayer() {
+        this.NumberOfNeuronsOnLayerList.add(this.nubmerOfInputs);
+        this.NumberOfNeuronsOnLayerList.add(40);
+        this.NumberOfNeuronsOnLayerList.add(30);
+        this.NumberOfNeuronsOnLayerList.add(10);
+    }
+    
+    public void setNumberOfNeuronsForEachLayer(List<Integer> SizeOfLayersList) {        
+        this.NumberOfNeuronsOnLayerList = SizeOfLayersList;
     }
     
     private List<Double> RandomList(int lenght) {
         List<Double> RandomList = new LinkedList<>();
         Random rand = new Random();
+        
         for(int i = 0; i < lenght; i++) {
             RandomList.add(rand.nextDouble());
         }
         return RandomList;
     }
     
-    private void addLayer(int layerSize) { // random 
+    private void addLayer(int layerSize, int neuronSize) { // random 
         List<Neuron> TempNeuronList = new LinkedList<>();
         
         for(int i = 0; i < layerSize; i++) {
-            TempNeuronList.add(new Neuron(RandomList(this.nubmerOfInputs)));
+            TempNeuronList.add(new Neuron(RandomList(neuronSize)));
         }
+        
+        NeuronLayersList.add(TempNeuronList);
     }
-    
+        
     public void setNetwork() {
-        this.setNumberOfNeuronsForEachLayer();
+        this.addLayer(this.NumberOfNeuronsOnLayerList.get(0),1);
         
-        boolean first = true;
-        
-        NumberOfNeuronsOnLayerList.stream().forEach((Integer limit) -> {
-            if(!first) {
-                for(int i = 0; i < limit; i++) {
-                    TempNeuronList.add(new Neuron(RandomList(this.nubmerOfInputs)));
-                }
-                NeuronLayersList.add(TempNeuronList);
-                TempNeuronList.clear();
-            }
-        });
-        
-        this.LayerOfNeurons1 = new LinkedList<>();
-        for(int i = 0; i < this.numbOfNeuronsAtFirstLayer; i++) {
-            this.LayerOfNeurons1.add(new Neuron());
+        for(int i = 1; i < this.NeuronLayersList.size(); i++) {
+            this.addLayer(this.NumberOfNeuronsOnLayerList.get(i),this.NumberOfNeuronsOnLayerList.get(i - 1));
         }
         
-        this.LayerOfNeurons2 = new LinkedList<>();
-        for(int i = 0; i < this.numbOfNeuronsAtSecondLayer; i++) {
-            this.LayerOfNeurons2.add(new Neuron());
-        }
-        
-        this.LayerOfNeurons3 = new LinkedList<>();
-        for(int i = 0; i < this.numbOfNeuronsAtThridLayer; i++) {
-            this.LayerOfNeurons3.add(new Neuron());
-        }
     }
     
     public void setNetwork(List<List<Neuron>> LayersList) {
-        if(FirstLayer.isEmpty() || SecondLayer.isEmpty() || ThirdLayer.isEmpty()) {
+        if(LayersList.isEmpty()) {
             throw new IllegalArgumentException("Some layer was empty");
         } else {
-            this.setNumberOfNeuronsForEachLayer(FirstLayer.size(), SecondLayer.size(), ThirdLayer.size());
-
-            this.LayerOfNeurons1 = new LinkedList<>();
-            this.LayerOfNeurons1 = FirstLayer;
-
-            this.LayerOfNeurons2 = new LinkedList<>();
-            this.LayerOfNeurons2 = SecondLayer;
-
-            this.LayerOfNeurons3 = new LinkedList<>();
-            this.LayerOfNeurons3 = ThirdLayer;
+            this.NeuronLayersList = LayersList;
         }
         
     }
@@ -104,23 +76,10 @@ public class NeuralNet {
     public void setWeights(int whichLayer, List<List<Double>> Weights) { 
         List<Neuron> TempNeuronList = new LinkedList<>();
         
-        switch(whichLayer) {
-            case 1: 
-                LayerOfNeurons1.stream().forEach((Neuron Neuron) -> {
-                   
-                    TempNeuronList.add(Neuron);
-                });
-                break;
-                
-            case 2:
-                
-                break;
-            case 3:
-                
-                break;
-            default:
-                throw new IllegalArgumentException("Secected layer doesn't exist");
-        }
+        this.NeuronLayersList.get(whichLayer).stream().forEach((Neuron neuron) -> {
+            TempNeuronList.add(new Neuron(neuron));
+        });
+        
     }
     
     
@@ -135,6 +94,11 @@ public class NeuralNet {
     
     public void setInputsOfNetwork(List<Double> InputNetworkData) {
         
+    }
+    
+    public NeuralNet() {
+        this.setLists();
+        this.setNumberOfNeuronsForEachLayer();
     }
     
     public static void main(String[] args) {

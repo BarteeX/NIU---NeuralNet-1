@@ -146,23 +146,22 @@ public final class Neuron {
     }
     
     public Neuron(List<Double> WeightsList) {
-        this.setValues();
+        this();
         
         this.setWeights(WeightsList);
     }
     
     public Neuron(List<Double> WeightsList, List<Double> InputList) {
-        this.setValues();
-        
-        this.setWeights(WeightsList);
+        this(WeightsList);
         this.setInputs(InputList);
     }
     
     public Neuron(List<Double> WeightsList, List<Double> InputList, Double Bias) {
-        this.setValues();
-        
-        this.setWeights(WeightsList);
-        this.setInputs(InputList);
+        this(WeightsList, InputList);
         this.setBias(Bias);
+    }
+    
+    public Neuron(Neuron Neuron) {
+        this(Neuron.getWeights(), Neuron.getInputs(), Neuron.getBias());
     }
 }
