@@ -110,32 +110,48 @@ public final class Neuron {
      * 
      * @param Input list of values for each synapses 
      */
-    public void setInputs(List<Double> Input) {
-        this.InputsList = Input;
+    public void setInputs(List<Double> input) {
+        this.InputsList = input;
     }
     
     /**
      * 
      * @param Input  list of weight for each synapses 
      */
-    public void setWeights(List<Double> Input) {
-        this.WeightsList = Input;
+    public void setWeights(List<Double> input) {
+        this.WeightsList = input;
     }
     
     /**
      * 
      * @param Input value of Bias synapse 
      */
-    public void setBias(Double Input) {
-        this.Bias = Input;
+    public void setBias(Double input) {
+        this.Bias = input;
     }
     
     /**
      * 
      * @param Input value of Beta for activation function
      */
-    public void setBeta(Double Input) { 
-        this.Beta = Input;
+    public void setBeta(Double input) { 
+        this.Beta = input;
+    }
+    
+    public void changeInput(int whichOne, Double input) {
+        this.InputsList.set(whichOne, input);
+    }
+    
+    public void changeWeight(int whichOne, Double weight){
+        this.WeightsList.set(whichOne, weight);
+    }
+    
+    public void changeBias(Double bias) {
+        this.Bias = bias;
+    }
+    
+    public void changeBeta(Double beta) {
+        this.Beta = beta;
     }
     
     /**
@@ -145,20 +161,20 @@ public final class Neuron {
         this.setValues();
     }
     
-    public Neuron(List<Double> WeightsList) {
+    public Neuron(List<Double> weightsList) {
         this();
         
-        this.setWeights(WeightsList);
+        this.setWeights(weightsList);
     }
     
-    public Neuron(List<Double> WeightsList, List<Double> InputList) {
-        this(WeightsList);
-        this.setInputs(InputList);
+    public Neuron(List<Double> weightsList, List<Double> inputList) {
+        this(weightsList);
+        this.setInputs(inputList);
     }
     
-    public Neuron(List<Double> WeightsList, List<Double> InputList, Double Bias) {
-        this(WeightsList, InputList);
-        this.setBias(Bias);
+    public Neuron(List<Double> weightsList, List<Double> inputList, Double bias) {
+        this(weightsList, inputList);
+        this.setBias(bias);
     }
     
     public Neuron(Neuron Neuron) {
